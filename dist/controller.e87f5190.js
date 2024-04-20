@@ -1356,6 +1356,9 @@ class RecipeView {
     this.#parentElement.innerHTML = '';
     this.#parentElement.insertAdjacentHTML('afterbegin', markup);
   };
+  addHandlerRender(handler) {
+    ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
+  }
   #generateMarkup() {
     return `
     <figure class="recipe__fig">
@@ -18467,7 +18470,7 @@ const recipeContainer = document.querySelector('.recipe');
 
 ///////////////////////////////////////
 
-const controlRecipe = async function () {
+const controlRecipes = async function () {
   try {
     const id = window.location.hash.slice(1);
     if (!id) return;
@@ -18479,14 +18482,16 @@ const controlRecipe = async function () {
     // 2. Rendering recipe
     _recipeView.default.render(model.state.recipe);
   } catch (err) {
-    alert(err);
+    console.log(err);
   }
 };
-controlRecipe();
-['hashchange', 'load'].forEach(ev => window.addEventListener(ev, controlRecipe));
 
-// window.addEventListener('hashchange', controlRecipe);
-// window.addEventListener('load', controlRecipe);
+// controlRecipes();
+
+const init = function () {
+  _recipeView.default.addHandlerRender(controlRecipes);
+};
+init();
 },{"./model.js":"src/js/model.js","./views/recipeView.js":"src/js/views/recipeView.js","core-js/stable":"node_modules/core-js/stable/index.js","regenerator-runtime/runtime":"node_modules/regenerator-runtime/runtime.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
