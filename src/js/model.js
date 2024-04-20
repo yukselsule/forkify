@@ -22,7 +22,8 @@ export const loadRecipe = async function (id) {
       ingredients: recipe.ingredients,
     };
   } catch (err) {
-    // Temp error hanfling
+    // Temp error handling
     console.error(`${err} 🤯🤯🤯🤯`);
+    throw err;
   }
 };
