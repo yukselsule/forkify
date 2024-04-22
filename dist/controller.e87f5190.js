@@ -978,7 +978,69 @@ const loadSearchResults = async function (query) {
 exports.loadSearchResults = loadSearchResults;
 },{"regenerator-runtime":"node_modules/regenerator-runtime/runtime.js","./config.js":"src/js/config.js","./helpers.js":"src/js/helpers.js"}],"src/img/icons.svg":[function(require,module,exports) {
 module.exports = "/icons.ae3c38d5.svg";
-},{}],"node_modules/fractional/index.js":[function(require,module,exports) {
+},{}],"src/js/views/view.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _icons = _interopRequireDefault(require("../../img/icons.svg"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+class View {
+  _data;
+  render(data) {
+    if (!data || Array.isArray(data) && data.length === 0) return this.renderError();
+    this._data = data;
+    const markup = this._generateMarkup();
+    this._clear();
+    this._parentElement.insertAdjacentHTML('afterbegin', markup);
+  }
+  _clear() {
+    this._parentElement.innerHTML = '';
+  }
+  renderSpinner() {
+    const markup = `
+        <div class="spinner">
+          <svg>
+            <use href="${_icons.default}#icon-loader"></use>
+          </svg>
+        </div>
+  `;
+    this._clear();
+    this._parentElement.insertAdjacentHTML('afterbegin', markup);
+  }
+  renderError(message = this._errorMessage) {
+    const markup = `
+          <div class="error">
+            <div>
+              <svg>
+                <use href="${_icons.default}#icon-alert-triangle"></use>
+              </svg>
+            </div>
+            <p>${message}</p>
+          </div>
+          `;
+    this._clear();
+    this._parentElement.insertAdjacentHTML('afterbegin', markup);
+  }
+  renderMessage(message = this._message) {
+    const markup = `
+          <div class="message">
+            <div>
+              <svg>
+                <use href="${_icons.default}#icon-smile"></use>
+              </svg>
+            </div>
+            <p>${message}</p>
+          </div>
+          `;
+    this._clear();
+    this._parentElement.insertAdjacentHTML('afterbegin', markup);
+  }
+}
+exports.default = View;
+},{"../../img/icons.svg":"src/img/icons.svg"}],"node_modules/fractional/index.js":[function(require,module,exports) {
 /*
 fraction.js
 A Javascript fraction library.
@@ -1354,71 +1416,23 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
+var _view = _interopRequireDefault(require("./view"));
 var _icons = _interopRequireDefault(require("../../img/icons.svg"));
 var _fractional = require("fractional");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-class RecipeView {
-  #parentElement = document.querySelector('.recipe');
-  #data;
-  #errorMessage = 'We could not find that recipe. Please try another one!';
-  #message = '';
-  render(data) {
-    this.#data = data;
-    const markup = this.#generateMarkup();
-    this.#clear();
-    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
-  }
-  #clear() {
-    this.#parentElement.innerHTML = '';
-  }
-  renderSpinner() {
-    const markup = `
-        <div class="spinner">
-          <svg>
-            <use href="${_icons.default}#icon-loader"></use>
-          </svg>
-        </div>
-  `;
-    this.#clear();
-    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
-  }
-  renderError(message = this.#errorMessage) {
-    const markup = `
-          <div class="error">
-            <div>
-              <svg>
-                <use href="${_icons.default}#icon-alert-triangle"></use>
-              </svg>
-            </div>
-            <p>${message}</p>
-          </div>
-          `;
-    this.#clear();
-    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
-  }
-  renderMessage(message = this.#message) {
-    const markup = `
-          <div class="message">
-            <div>
-              <svg>
-                <use href="${_icons.default}#icon-smile"></use>
-              </svg>
-            </div>
-            <p>${message}</p>
-          </div>
-          `;
-    this.#clear();
-    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
-  }
+class RecipeView extends _view.default {
+  _parentElement = document.querySelector('.recipe');
+  _errorMessage = 'We could not find that recipe. Please try another one!';
+  _message = '';
   addHandlerRender(handler) {
     ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
   }
-  #generateMarkup() {
+  _generateMarkup() {
     return `
     <figure class="recipe__fig">
-      <img src="${this.#data.image}" alt="${this.#data.title}"class="recipe__img" />
+      <img src="${this._data.image}" alt="${this._data.title}"class="recipe__img" />
       <h1 class="recipe__title">
-        <span>"${this.#data.title}"</span>
+        <span>"${this._data.title}"</span>
       </h1>
     </figure>
 
@@ -1427,14 +1441,14 @@ class RecipeView {
         <svg class="recipe__info-icon">
           <use href="${_icons.default}#icon-clock"></use>
         </svg>
-        <span class="recipe__info-data recipe__info-data--minutes">${this.#data.cookingTime}</span>
+        <span class="recipe__info-data recipe__info-data--minutes">${this._data.cookingTime}</span>
         <span class="recipe__info-text">minutes</span>
       </div>
       <div class="recipe__info">
         <svg class="recipe__info-icon">
           <use href="${_icons.default}#icon-users"></use>
         </svg>
-        <span class="recipe__info-data recipe__info-data--people">${this.#data.servings}</span>
+        <span class="recipe__info-data recipe__info-data--people">${this._data.servings}</span>
         <span class="recipe__info-text">servings</span>
 
         <div class="recipe__info-buttons">
@@ -1452,9 +1466,7 @@ class RecipeView {
       </div>
 
       <div class="recipe__user-generated">
-        <svg>
-          <use href="${_icons.default}#icon-user"></use>
-        </svg>
+        
       </div>
       <button class="btn--round">
         <svg class="">
@@ -1466,7 +1478,7 @@ class RecipeView {
     <div class="recipe__ingredients">
       <h2 class="heading--2">Recipe ingredients</h2>
       <ul class="recipe__ingredient-list">
-          ${this.#data.ingredients.map(this.#generateMarkupIngredient).join('')}
+          ${this._data.ingredients.map(this._generateMarkupIngredient).join('')}
       </ul>
     </div>
 
@@ -1474,12 +1486,12 @@ class RecipeView {
       <h2 class="heading--2">How to cook it</h2>
       <p class="recipe__directions-text">
         This recipe was carefully designed and tested by
-        <span class="recipe__publisher">${this.#data.publisher}</span>. Please check out
+        <span class="recipe__publisher">${this._data.publisher}</span>. Please check out
         directions at their website.
       </p>
       <a
         class="btn--small recipe__btn"
-        href="${this.#data.sourceUrl}"
+        href="${this._data.sourceUrl}"
         target="_blank"
       >
         <span>Directions</span>
@@ -1489,7 +1501,7 @@ class RecipeView {
       </a>
     </div>`;
   }
-  #generateMarkupIngredient(ing) {
+  _generateMarkupIngredient(ing) {
     return `
     <li class="recipe__ingredient">
       <svg class="recipe__icon">
@@ -1505,7 +1517,7 @@ class RecipeView {
   }
 }
 var _default = exports.default = new RecipeView();
-},{"../../img/icons.svg":"src/img/icons.svg","fractional":"node_modules/fractional/index.js"}],"src/js/views/searchView.js":[function(require,module,exports) {
+},{"./view":"src/js/views/view.js","../../img/icons.svg":"src/img/icons.svg","fractional":"node_modules/fractional/index.js"}],"src/js/views/searchView.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1530,7 +1542,41 @@ class SearchView {
   }
 }
 var _default = exports.default = new SearchView();
-},{}],"node_modules/core-js/internals/global.js":[function(require,module,exports) {
+},{}],"src/js/views/resultsView.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _view = _interopRequireDefault(require("./view"));
+var _icons = _interopRequireDefault(require("../../img/icons.svg"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+class ResultsView extends _view.default {
+  _parentElement = document.querySelector('.results');
+  _errorMessage = 'No recipes found for your query! Please try again :)';
+  _message = '';
+  _generateMarkup() {
+    return this._data.map(this._generateMarkupPreview).join('');
+  }
+  _generateMarkupPreview(result) {
+    return `
+         <li class="preview">
+            <a class="preview__link" href="#${result.id}">
+              <figure class="preview__fig">
+                <img src="${result.image}" alt="${result.title}" />
+              </figure>
+              <div class="preview__data">
+                <h4 class="preview__title">${result.title}</h4>
+                <p class="preview__publisher">${result.publisher}</p>
+              </div>
+            </a>
+          </li>
+  `;
+  }
+}
+var _default = exports.default = new ResultsView();
+},{"./view":"src/js/views/view.js","../../img/icons.svg":"src/img/icons.svg"}],"node_modules/core-js/internals/global.js":[function(require,module,exports) {
 var global = arguments[3];
 'use strict';
 var check = function (it) {
@@ -18539,13 +18585,18 @@ module.exports = require('../internals/path');
 var model = _interopRequireWildcard(require("./model.js"));
 var _recipeView = _interopRequireDefault(require("./views/recipeView.js"));
 var _searchView = _interopRequireDefault(require("./views/searchView.js"));
+var _resultsView = _interopRequireDefault(require("./views/resultsView.js"));
 require("core-js/stable");
-require("regenerator-runtime/runtime");
+require("regenerator-runtime");
+var _runtime = require("regenerator-runtime/runtime");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
 function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
 ///////////////////////////////////////
 
+if (module.hot) {
+  module.hot.accept();
+}
 const controlRecipes = async function () {
   try {
     const id = window.location.hash.slice(1);
@@ -18563,6 +18614,8 @@ const controlRecipes = async function () {
 };
 const controlSearcResults = async function () {
   try {
+    _resultsView.default.renderSpinner();
+
     // 1) Get search query
     const query = _searchView.default.getQuery();
     if (!query) return;
@@ -18572,6 +18625,7 @@ const controlSearcResults = async function () {
 
     // 3) Render results
     console.log(model.state.search.results);
+    _resultsView.default.render(model.state.search.results);
   } catch (err) {
     console.log(err);
   }
@@ -18581,7 +18635,7 @@ const init = function () {
   _searchView.default.addHandlerSearch(controlSearcResults);
 };
 init();
-},{"./model.js":"src/js/model.js","./views/recipeView.js":"src/js/views/recipeView.js","./views/searchView.js":"src/js/views/searchView.js","core-js/stable":"node_modules/core-js/stable/index.js","regenerator-runtime/runtime":"node_modules/regenerator-runtime/runtime.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./model.js":"src/js/model.js","./views/recipeView.js":"src/js/views/recipeView.js","./views/searchView.js":"src/js/views/searchView.js","./views/resultsView.js":"src/js/views/resultsView.js","core-js/stable":"node_modules/core-js/stable/index.js","regenerator-runtime":"node_modules/regenerator-runtime/runtime.js","regenerator-runtime/runtime":"node_modules/regenerator-runtime/runtime.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
