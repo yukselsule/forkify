@@ -9,9 +9,9 @@ import { async } from 'regenerator-runtime/runtime';
 
 ///////////////////////////////////////
 
-if (module.hot) {
-  module.hot.accept();
-}
+// if (module.hot) {
+//   module.hot.accept();
+// }
 
 const controlRecipes = async function () {
   try {
@@ -30,7 +30,7 @@ const controlRecipes = async function () {
   }
 };
 
-const controlSearcResults = async function () {
+const controlSearchResults = async function () {
   try {
     resultsView.renderSpinner();
 
@@ -42,8 +42,8 @@ const controlSearcResults = async function () {
     await model.loadSearchResults(query);
 
     // 3) Render results
-    console.log(model.state.search.results);
-    resultsView.render(model.state.search.results);
+    // console.log(model.state.search.results);
+    resultsView.render(model.getSearchResultsPage());
   } catch (err) {
     console.log(err);
   }
@@ -51,6 +51,6 @@ const controlSearcResults = async function () {
 
 const init = function () {
   recipeView.addHandlerRender(controlRecipes);
-  searchView.addHandlerSearch(controlSearcResults);
+  searchView.addHandlerSearch(controlSearchResults);
 };
 init();

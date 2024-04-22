@@ -887,9 +887,10 @@ try {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.TIMEOUT_SEC = exports.API_URL = void 0;
+exports.TIMEOUT_SEC = exports.RES_PER_PAGE = exports.API_URL = void 0;
 const API_URL = exports.API_URL = 'https://forkify-api.herokuapp.com/api/v2/recipes/';
 const TIMEOUT_SEC = exports.TIMEOUT_SEC = 10;
+const RES_PER_PAGE = exports.RES_PER_PAGE = 10;
 },{}],"src/js/helpers.js":[function(require,module,exports) {
 "use strict";
 
@@ -923,7 +924,7 @@ exports.getJSON = getJSON;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.state = exports.loadSearchResults = exports.loadRecipe = void 0;
+exports.state = exports.loadSearchResults = exports.loadRecipe = exports.getSearchResultsPage = void 0;
 var _regeneratorRuntime = require("regenerator-runtime");
 var _config = require("./config.js");
 var _helpers = require("./helpers.js");
@@ -931,7 +932,9 @@ const state = exports.state = {
   recipe: {},
   search: {
     query: '',
-    results: []
+    results: [],
+    page: 1,
+    resultsPerPage: _config.RES_PER_PAGE
   }
 };
 const loadRecipe = async function (id) {
@@ -976,6 +979,13 @@ const loadSearchResults = async function (query) {
   }
 };
 exports.loadSearchResults = loadSearchResults;
+const getSearchResultsPage = function (page = state.search.page) {
+  state.search.page = page;
+  const start = (page - 1) * state.search.resultsPerPage; //0;
+  const end = page * state.search.resultsPerPage;
+  return state.search.results.slice(start, end);
+};
+exports.getSearchResultsPage = getSearchResultsPage;
 },{"regenerator-runtime":"node_modules/regenerator-runtime/runtime.js","./config.js":"src/js/config.js","./helpers.js":"src/js/helpers.js"}],"src/img/icons.svg":[function(require,module,exports) {
 module.exports = "/icons.ae3c38d5.svg";
 },{}],"src/js/views/view.js":[function(require,module,exports) {
@@ -18594,9 +18604,10 @@ function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return 
 function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
 ///////////////////////////////////////
 
-if (module.hot) {
-  module.hot.accept();
-}
+// if (module.hot) {
+//   module.hot.accept();
+// }
+
 const controlRecipes = async function () {
   try {
     const id = window.location.hash.slice(1);
@@ -18612,7 +18623,7 @@ const controlRecipes = async function () {
     _recipeView.default.renderError();
   }
 };
-const controlSearcResults = async function () {
+const controlSearchResults = async function () {
   try {
     _resultsView.default.renderSpinner();
 
@@ -18624,15 +18635,15 @@ const controlSearcResults = async function () {
     await model.loadSearchResults(query);
 
     // 3) Render results
-    console.log(model.state.search.results);
-    _resultsView.default.render(model.state.search.results);
+    // console.log(model.state.search.results);
+    _resultsView.default.render(model.getSearchResultsPage());
   } catch (err) {
     console.log(err);
   }
 };
 const init = function () {
   _recipeView.default.addHandlerRender(controlRecipes);
-  _searchView.default.addHandlerSearch(controlSearcResults);
+  _searchView.default.addHandlerSearch(controlSearchResults);
 };
 init();
 },{"./model.js":"src/js/model.js","./views/recipeView.js":"src/js/views/recipeView.js","./views/searchView.js":"src/js/views/searchView.js","./views/resultsView.js":"src/js/views/resultsView.js","core-js/stable":"node_modules/core-js/stable/index.js","regenerator-runtime":"node_modules/regenerator-runtime/runtime.js","regenerator-runtime/runtime":"node_modules/regenerator-runtime/runtime.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
@@ -18660,7 +18671,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61199" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49161" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
