@@ -1474,7 +1474,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _view = _interopRequireDefault(require("./view"));
+var _view = _interopRequireDefault(require("./view.js"));
 var _icons = _interopRequireDefault(require("../../img/icons.svg"));
 var _fractional = require("fractional");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -1592,7 +1592,7 @@ class RecipeView extends _view.default {
   }
 }
 var _default = exports.default = new RecipeView();
-},{"./view":"src/js/views/view.js","../../img/icons.svg":"src/img/icons.svg","fractional":"node_modules/fractional/index.js"}],"src/js/views/searchView.js":[function(require,module,exports) {
+},{"./view.js":"src/js/views/view.js","../../img/icons.svg":"src/img/icons.svg","fractional":"node_modules/fractional/index.js"}],"src/js/views/searchView.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1624,7 +1624,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _view = _interopRequireDefault(require("./view"));
+var _view = _interopRequireDefault(require("./view.js"));
 var _icons = _interopRequireDefault(require("../../img/icons.svg"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 class PreviewView extends _view.default {
@@ -1647,15 +1647,15 @@ class PreviewView extends _view.default {
   }
 }
 var _default = exports.default = new PreviewView();
-},{"./view":"src/js/views/view.js","../../img/icons.svg":"src/img/icons.svg"}],"src/js/views/resultsView.js":[function(require,module,exports) {
+},{"./view.js":"src/js/views/view.js","../../img/icons.svg":"src/img/icons.svg"}],"src/js/views/resultsView.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _view = _interopRequireDefault(require("./view"));
-var _previewView = _interopRequireDefault(require("./previewView"));
+var _view = _interopRequireDefault(require("./view.js"));
+var _previewView = _interopRequireDefault(require("./previewView.js"));
 var _icons = _interopRequireDefault(require("../../img/icons.svg"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 class ResultsView extends _view.default {
@@ -1667,14 +1667,14 @@ class ResultsView extends _view.default {
   }
 }
 var _default = exports.default = new ResultsView();
-},{"./view":"src/js/views/view.js","./previewView":"src/js/views/previewView.js","../../img/icons.svg":"src/img/icons.svg"}],"src/js/views/paginationView.js":[function(require,module,exports) {
+},{"./view.js":"src/js/views/view.js","./previewView.js":"src/js/views/previewView.js","../../img/icons.svg":"src/img/icons.svg"}],"src/js/views/paginationView.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _view = _interopRequireDefault(require("./view"));
+var _view = _interopRequireDefault(require("./view.js"));
 var _icons = _interopRequireDefault(require("../../img/icons.svg"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 class PaginationView extends _view.default {
@@ -1737,14 +1737,14 @@ class PaginationView extends _view.default {
   }
 }
 var _default = exports.default = new PaginationView();
-},{"./view":"src/js/views/view.js","../../img/icons.svg":"src/img/icons.svg"}],"src/js/views/bookmarksView.js":[function(require,module,exports) {
+},{"./view.js":"src/js/views/view.js","../../img/icons.svg":"src/img/icons.svg"}],"src/js/views/bookmarksView.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _view = _interopRequireDefault(require("./view"));
+var _view = _interopRequireDefault(require("./view.js"));
 var _previewView = _interopRequireDefault(require("./previewView.js"));
 var _icons = _interopRequireDefault(require("../../img/icons.svg"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -1757,7 +1757,7 @@ class BookmarksView extends _view.default {
   }
 }
 var _default = exports.default = new BookmarksView();
-},{"./view":"src/js/views/view.js","./previewView.js":"src/js/views/previewView.js","../../img/icons.svg":"src/img/icons.svg"}],"node_modules/core-js/internals/global.js":[function(require,module,exports) {
+},{"./view.js":"src/js/views/view.js","./previewView.js":"src/js/views/previewView.js","../../img/icons.svg":"src/img/icons.svg"}],"node_modules/core-js/internals/global.js":[function(require,module,exports) {
 var global = arguments[3];
 'use strict';
 var check = function (it) {
