@@ -1474,7 +1474,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _view = _interopRequireDefault(require("./view.js"));
+var _view = _interopRequireDefault(require("./view"));
 var _icons = _interopRequireDefault(require("../../img/icons.svg"));
 var _fractional = require("fractional");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -1592,7 +1592,7 @@ class RecipeView extends _view.default {
   }
 }
 var _default = exports.default = new RecipeView();
-},{"./view.js":"src/js/views/view.js","../../img/icons.svg":"src/img/icons.svg","fractional":"node_modules/fractional/index.js"}],"src/js/views/searchView.js":[function(require,module,exports) {
+},{"./view":"src/js/views/view.js","../../img/icons.svg":"src/img/icons.svg","fractional":"node_modules/fractional/index.js"}],"src/js/views/searchView.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1629,21 +1629,26 @@ var _icons = _interopRequireDefault(require("../../img/icons.svg"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 class PreviewView extends _view.default {
   _parentElement = '';
-  __generateMarkup() {
+  _generateMarkup() {
     const id = window.location.hash.slice(1);
     return `
-         <li class="preview">
-            <a class="preview__link ${this._data.id === id ? 'preview__link--active' : ''}" href="#${this._data.id}">
-              <figure class="preview__fig">
-                <img src="${this._data.image}" alt="${this._data.title}" />
-              </figure>
-              <div class="preview__data">
-                <h4 class="preview__title">${this._data.title}</h4>
-                <p class="preview__publisher">${this._data.publisher}</p>
-              </div>
-            </a>
-          </li>
-  `;
+      <li class="preview">
+        <a class="preview__link ${this._data.id === id ? 'preview__link--active' : ''}" href="#${this._data.id}">
+          <figure class="preview__fig">
+            <img src="${this._data.image}" alt="${this._data.title}" />
+          </figure>
+          <div class="preview__data">
+            <h4 class="preview__title">${this._data.title}</h4>
+            <p class="preview__publisher">${this._data.publisher}</p>
+            <div class="preview__user-generated ${this._data.key ? '' : 'hidden'}">
+              <svg>
+              <use href="${_icons.default}#icon-user"></use>
+              </svg>
+            </div>
+          </div>
+        </a>
+      </li>
+    `;
   }
 }
 var _default = exports.default = new PreviewView();
@@ -1654,8 +1659,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _view = _interopRequireDefault(require("./view.js"));
-var _previewView = _interopRequireDefault(require("./previewView.js"));
+var _view = _interopRequireDefault(require("./view"));
+var _previewView = _interopRequireDefault(require("./previewView"));
 var _icons = _interopRequireDefault(require("../../img/icons.svg"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 class ResultsView extends _view.default {
@@ -1667,14 +1672,14 @@ class ResultsView extends _view.default {
   }
 }
 var _default = exports.default = new ResultsView();
-},{"./view.js":"src/js/views/view.js","./previewView.js":"src/js/views/previewView.js","../../img/icons.svg":"src/img/icons.svg"}],"src/js/views/paginationView.js":[function(require,module,exports) {
+},{"./view":"src/js/views/view.js","./previewView":"src/js/views/previewView.js","../../img/icons.svg":"src/img/icons.svg"}],"src/js/views/paginationView.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _view = _interopRequireDefault(require("./view.js"));
+var _view = _interopRequireDefault(require("./view"));
 var _icons = _interopRequireDefault(require("../../img/icons.svg"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 class PaginationView extends _view.default {
@@ -1737,7 +1742,7 @@ class PaginationView extends _view.default {
   }
 }
 var _default = exports.default = new PaginationView();
-},{"./view.js":"src/js/views/view.js","../../img/icons.svg":"src/img/icons.svg"}],"src/js/views/bookmarksView.js":[function(require,module,exports) {
+},{"./view":"src/js/views/view.js","../../img/icons.svg":"src/img/icons.svg"}],"src/js/views/bookmarksView.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18879,7 +18884,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61136" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63209" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

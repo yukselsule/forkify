@@ -1,5 +1,5 @@
-import View from './view.js';
-import previewView from './previewView.js';
+import View from './view';
+import previewView from './previewView';
 import icons from '../../img/icons.svg';
 
 class ResultsView extends View {
