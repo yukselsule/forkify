@@ -997,12 +997,16 @@ const updateServings = function (newServings) {
   state.recipe.servings = newServings;
 };
 exports.updateServings = updateServings;
+const persistBookmarks = function () {
+  localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
+};
 const addBookmark = function (recipe) {
   // Add bookmark
   state.bookmarks.push(recipe);
 
   //Mark current recipe as bookmark
   if (recipe.id === state.recipe.id) state.recipe.bookmarked = true;
+  persistBookmarks();
 };
 exports.addBookmark = addBookmark;
 const deleteBookmark = function (id) {
@@ -1011,8 +1015,18 @@ const deleteBookmark = function (id) {
   state.bookmarks.splice(index, 1);
   //Mark current recipe as not  bookmark
   if (id === state.recipe.id) state.recipe.bookmarked = false;
+  persistBookmarks();
 };
 exports.deleteBookmark = deleteBookmark;
+const init = function () {
+  const storage = localStorage.getItem('bookmarks');
+  if (storage) state.bookmarks = JSON.parse(storage);
+};
+init();
+const clearBookmarks = function () {
+  localStorage.clear('bookmarks');
+};
+// clearBookmarks();
 },{"regenerator-runtime":"node_modules/regenerator-runtime/runtime.js","./config.js":"src/js/config.js","./helpers.js":"src/js/helpers.js"}],"src/img/icons.svg":[function(require,module,exports) {
 module.exports = "/icons.ae3c38d5.svg";
 },{}],"src/js/views/view.js":[function(require,module,exports) {
@@ -1757,6 +1771,9 @@ class BookmarksView extends _view.default {
   _parentElement = document.querySelector('.bookmarks__list');
   _errorMessage = 'No bookmarks yet. Find a nice recipe and bookmark it ;)';
   _message = '';
+  addHandlerRender(handler) {
+    window.addEventListener('load', handler());
+  }
   _generateMarkup() {
     return this._data.map(bookmark => _previewView.default.render(bookmark, false)).join('');
   }
@@ -18794,12 +18811,14 @@ const controlRecipes = async function () {
 
     // 0. Update results view to mark selected search result
     _resultsView.default.update(model.getSearchResultsPage());
+
+    // 1. Updating bookmarks view
     _bookmarksView.default.update(model.state.bookmarks);
 
-    // 1. Loading recipe
+    // 2. Loading recipe
     await model.loadRecipe(id);
 
-    // 2. Rendering recipe
+    // 3. Rendering recipe
     _recipeView.default.render(model.state.recipe);
   } catch (err) {
     _recipeView.default.renderError();
@@ -18851,7 +18870,11 @@ const controlAddBookmark = function () {
   // 3) Render bookmarks
   _bookmarksView.default.render(model.state.bookmarks);
 };
+const controlBookmarks = function () {
+  _bookmarksView.default.render(model.state.bookmarks);
+};
 const init = function () {
+  _bookmarksView.default.addHandlerRender(controlBookmarks);
   _recipeView.default.addHandlerRender(controlRecipes);
   _recipeView.default.addHandlerUpdateServings(controlServings);
   _recipeView.default.addHandlerAddBookmark(controlAddBookmark);
@@ -18884,7 +18907,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63209" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63720" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
