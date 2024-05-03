@@ -1026,10 +1026,11 @@ var _icons = _interopRequireDefault(require("../../img/icons.svg"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 class View {
   _data;
-  render(data) {
+  render(data, render = true) {
     if (!data || Array.isArray(data) && data.length === 0) return this.renderError();
     this._data = data;
     const markup = this._generateMarkup();
+    if (!render) return markup;
     this._clear();
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
   }
@@ -1616,7 +1617,7 @@ class SearchView {
   }
 }
 var _default = exports.default = new SearchView();
-},{}],"src/js/views/resultsView.js":[function(require,module,exports) {
+},{}],"src/js/views/previewView.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1626,32 +1627,47 @@ exports.default = void 0;
 var _view = _interopRequireDefault(require("./view"));
 var _icons = _interopRequireDefault(require("../../img/icons.svg"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-class ResultsView extends _view.default {
-  _parentElement = document.querySelector('.results');
-  _errorMessage = 'No recipes found for your query! Please try again :)';
-  _message = '';
-  _generateMarkup() {
-    return this._data.map(this._generateMarkupPreview).join('');
-  }
-  _generateMarkupPreview(result) {
+class PreviewView extends _view.default {
+  _parentElement = '';
+  __generateMarkup() {
     const id = window.location.hash.slice(1);
     return `
          <li class="preview">
-            <a class="preview__link ${result.id === id ? 'preview__link--active' : ''}" href="#${result.id}">
+            <a class="preview__link ${this._data.id === id ? 'preview__link--active' : ''}" href="#${this._data.id}">
               <figure class="preview__fig">
-                <img src="${result.image}" alt="${result.title}" />
+                <img src="${this._data.image}" alt="${this._data.title}" />
               </figure>
               <div class="preview__data">
-                <h4 class="preview__title">${result.title}</h4>
-                <p class="preview__publisher">${result.publisher}</p>
+                <h4 class="preview__title">${this._data.title}</h4>
+                <p class="preview__publisher">${this._data.publisher}</p>
               </div>
             </a>
           </li>
   `;
   }
 }
+var _default = exports.default = new PreviewView();
+},{"./view":"src/js/views/view.js","../../img/icons.svg":"src/img/icons.svg"}],"src/js/views/resultsView.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _view = _interopRequireDefault(require("./view"));
+var _previewView = _interopRequireDefault(require("./previewView"));
+var _icons = _interopRequireDefault(require("../../img/icons.svg"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+class ResultsView extends _view.default {
+  _parentElement = document.querySelector('.results');
+  _errorMessage = 'No recipes found for your query! Please try again :)';
+  _message = '';
+  _generateMarkup() {
+    return this._data.map(result => _previewView.default.render(result, false)).join('');
+  }
+}
 var _default = exports.default = new ResultsView();
-},{"./view":"src/js/views/view.js","../../img/icons.svg":"src/img/icons.svg"}],"src/js/views/paginationView.js":[function(require,module,exports) {
+},{"./view":"src/js/views/view.js","./previewView":"src/js/views/previewView.js","../../img/icons.svg":"src/img/icons.svg"}],"src/js/views/paginationView.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1721,7 +1737,27 @@ class PaginationView extends _view.default {
   }
 }
 var _default = exports.default = new PaginationView();
-},{"./view":"src/js/views/view.js","../../img/icons.svg":"src/img/icons.svg"}],"node_modules/core-js/internals/global.js":[function(require,module,exports) {
+},{"./view":"src/js/views/view.js","../../img/icons.svg":"src/img/icons.svg"}],"src/js/views/bookmarksView.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _view = _interopRequireDefault(require("./view"));
+var _previewView = _interopRequireDefault(require("./previewView.js"));
+var _icons = _interopRequireDefault(require("../../img/icons.svg"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+class BookmarksView extends _view.default {
+  _parentElement = document.querySelector('.bookmarks__list');
+  _errorMessage = 'No bookmarks yet. Find a nice recipe and bookmark it ;)';
+  _message = '';
+  _generateMarkup() {
+    return this._data.map(bookmark => _previewView.default.render(bookmark, false)).join('');
+  }
+}
+var _default = exports.default = new BookmarksView();
+},{"./view":"src/js/views/view.js","./previewView.js":"src/js/views/previewView.js","../../img/icons.svg":"src/img/icons.svg"}],"node_modules/core-js/internals/global.js":[function(require,module,exports) {
 var global = arguments[3];
 'use strict';
 var check = function (it) {
@@ -18732,6 +18768,7 @@ var _recipeView = _interopRequireDefault(require("./views/recipeView.js"));
 var _searchView = _interopRequireDefault(require("./views/searchView.js"));
 var _resultsView = _interopRequireDefault(require("./views/resultsView.js"));
 var _paginationView = _interopRequireDefault(require("./views/paginationView.js"));
+var _bookmarksView = _interopRequireDefault(require("./views/bookmarksView.js"));
 require("core-js/stable");
 require("regenerator-runtime");
 var _runtime = require("regenerator-runtime/runtime");
@@ -18752,6 +18789,7 @@ const controlRecipes = async function () {
 
     // 0. Update results view to mark selected search result
     _resultsView.default.update(model.getSearchResultsPage());
+    _bookmarksView.default.update(model.state.bookmarks);
 
     // 1. Loading recipe
     await model.loadRecipe(id);
@@ -18799,8 +18837,14 @@ const controlServings = function (newServings) {
   _recipeView.default.update(model.state.recipe);
 };
 const controlAddBookmark = function () {
+  // 1) Add/remove bookmark
   if (!model.state.recipe.bookmarked) model.addBookmark(model.state.recipe);else model.deleteBookmark(model.state.recipe.id);
+
+  // 2) Update recipe view
   _recipeView.default.update(model.state.recipe);
+
+  // 3) Render bookmarks
+  _bookmarksView.default.render(model.state.bookmarks);
 };
 const init = function () {
   _recipeView.default.addHandlerRender(controlRecipes);
@@ -18810,7 +18854,7 @@ const init = function () {
   _paginationView.default.addHandlerClick(controlPagination);
 };
 init();
-},{"./model.js":"src/js/model.js","./views/recipeView.js":"src/js/views/recipeView.js","./views/searchView.js":"src/js/views/searchView.js","./views/resultsView.js":"src/js/views/resultsView.js","./views/paginationView.js":"src/js/views/paginationView.js","core-js/stable":"node_modules/core-js/stable/index.js","regenerator-runtime":"node_modules/regenerator-runtime/runtime.js","regenerator-runtime/runtime":"node_modules/regenerator-runtime/runtime.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./model.js":"src/js/model.js","./views/recipeView.js":"src/js/views/recipeView.js","./views/searchView.js":"src/js/views/searchView.js","./views/resultsView.js":"src/js/views/resultsView.js","./views/paginationView.js":"src/js/views/paginationView.js","./views/bookmarksView.js":"src/js/views/bookmarksView.js","core-js/stable":"node_modules/core-js/stable/index.js","regenerator-runtime":"node_modules/regenerator-runtime/runtime.js","regenerator-runtime/runtime":"node_modules/regenerator-runtime/runtime.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -18835,7 +18879,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56745" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61136" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
