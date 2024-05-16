@@ -5,9 +5,10 @@
   "browserslist": [
     "last 1 Chrome versions"
   ],
+  "default": "index.html",
   "scripts": {
     "start": "parcel index.html",
-    "build": "parcel build index.html"
+    "build": "parcel build --no-minify index.html --out-dir ./dist"
   },
   "author": "Şule Cantekin",
   "license": "ISC",
